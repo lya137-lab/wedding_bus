@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>버스 픽업 경로 안내</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body { margin: 0; font-family: sans-serif; }
+    #map { height: 90vh; width: 100%; }
+    .header { padding: 12px 16px; background: #f8f8f8; border-bottom: 1px solid #ddd; }
+    .header h2 { margin: 0 0 8px 0; font-size: 18px; }
+    .header ul { padding-left: 20px; margin: 0; font-size: 14px; list-style: none; }
+    .header li::before { content: "• "; color: #555; }
+    .arrival { margin-top: 8px; font-size: 14px; color: #333; }
+    @media (max-width: 600px) {
+      .header h2 { font-size: 16px; }
+      .header ul { font-size: 12px; }
+      .arrival { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>🚌 픽업 순서 및 경로</h2>
+    <ul>
+      <li>① 김해센텀병원 (06:30) / 주소 : 경남 김해시 구지로 56</li>
+      <li>② 장유1동사무소 (06:40) / 주소 : 경남 김해시 금관대로 579</li>
+      <li>③ 창원시청 버스정류소 (07:00) / 주소 : 경남 창원시 성산구 중앙대로 151</li>
+      <li>④ 마산역(구 아리랑호텔) (07:30) / 주소 : 경남 창원시 마산회원구 마산역광장로 28</li>
+    </ul>
+    <div class="arrival">🏁 도착지 : 아펠가모 공덕점 / 서울 마포구 마포대로 92 효성해링턴스퀘어 B동 7층</div>
+  </div>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([35.5, 127.5], 7);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const points = [{'label': '① 김해센텀병원 (06:30)', 'lat': 35.233353, 'lng': 128.881691, 'link': 'https://map.naver.com/p/search/%EA%B9%80%ED%95%B4%EC%84%BC%ED%85%80%EB%B3%91%EC%9B%90/place/21295525?c=18.14,0,0,0,dh&placePath=/home?entry=bmp&from=map&fromPanelNum=2&timestamp=202509081726&locale=ko&svcName=map_pcv5&searchText=%EA%B9%80%ED%95%B4%EC%84%BC%ED%85%80%EB%B3%91%EC%9B%90'}, {'label': '② 장유1동사무소 (06:40)', 'lat': 35.206188, 'lng': 128.802212, 'link': 'https://map.naver.com/p/search/%EC%9E%A5%EC%9C%A01%EB%8F%99%EC%82%AC%EB%AC%B4%EC%86%8C/place/33152369?c=15.00,0,0,0,dh&placePath=/home?entry=bmp&from=map&fromPanelNum=2&timestamp=202509081726&locale=ko&svcName=map_pcv5&searchText=%EC%9E%A5%EC%9C%A01%EB%8F%99%EC%82%AC%EB%AC%B4%EC%86%8C'}, {'label': '③ 창원시청 버스정류소 (07:00)', 'lat': 35.227952, 'lng': 128.681209, 'link': 'https://map.naver.com/p/entry/bus-station/602536?c=17.85,0,0,0,dh'}, {'label': '④ 마산역(구 아리랑호텔) (07:30)', 'lat': 35.228657, 'lng': 128.582284, 'link': 'https://map.naver.com/p/search/%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84%20%EC%B0%BD%EC%9B%90%EC%8B%9C%20%EB%A7%88%EC%82%B0%ED%9A%8C%EC%9B%90%EA%B5%AC%20%EB%A7%88%EC%82%BC%EC%97%AD%EA%B4%91%EC%9E%A5%EB%A1%9C%2024/address/14313205.9170099,4195815.6401593,%EA%B2%BD%EC%83%81%EB%82%A8%EB%8F%84%20%EC%B0%BD%EC%9B%90%EC%8B%9C%20%EB%A7%88%EC%82%BC%ED%9A%8C%EC%9B%90%EA%B5%AC%20%EB%A7%88%EC%82%BC%EC%97%AD%EA%B4%91%EC%9E%A5%EB%A1%9C%2024,new?c=15.00,0,0,0,dh&isCorrectAnswer=true'}];
+
+    const latlngs = [];
+    const bounds = L.latLngBounds();
+
+    points.forEach(point => {
+      const marker = L.marker([point.lat, point.lng]).addTo(map);
+      const popupContent = `<b>${point.label}</b><br><a href="${point.link}" target="_blank">📍 네이버맵으로 열기</a>`;
+      marker.bindPopup(popupContent);
+      latlngs.push([point.lat, point.lng]);
+      bounds.extend([point.lat, point.lng]);
+    });
+
+    const polyline = L.polyline(latlngs, {color: 'blue'}).addTo(map);
+    map.fitBounds(bounds);
+  </script>
+</body>
+</html>
