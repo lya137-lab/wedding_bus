@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>픽업 경로 안내</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+    .container {
+      max-width: 720px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .title::before {
+      content: "🚌";
+      font-size: 24px;
+    }
+    .location {
+      font-size: 16px;
+      color: #444;
+      line-height: 1.6;
+      margin-left: 8px;
+    }
+    .info {
+      margin-top: 20px;
+      font-size: 16px;
+      padding-left: 8px;
+    }
+    .info div {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+    }
+    .info span {
+      margin-right: 6px;
+    }
+    .highlight {
+      color: #0056d6;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .highlight:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 500px) {
+      .container {
+        margin: 10px;
+        padding: 16px;
+      }
+      .title {
+        font-size: 18px;
+      }
+      .location {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">픽업 순서 및 경로</div>
+    <div class="location">① 김해센텀병원 (06:30) / 주소 : 경남 김해시 구지로 56</div>
+    <div class="location">② 장유1동사무소 (06:40) / 주소 : 경남 김해시 금관대로 579</div>
+    <div class="location">③ 창원시청 버스정류소 (07:00) / 주소 : 경남 창원시 성산구 중앙대로 151</div>
+    <div class="location">④ 마산역(투썸플레이스 앞) (07:30) / 주소 : 경남 창원시 마산회원구 마산역광장로 28</div>
+    <div class="location">⑤ 아펠가모 공덕점 (도착) / 주소 : 서울 마포구 마포대로 92 효성해링턴스퀘어 B동 7층</div>
+    <div class="info">
+      <div><span>🚍</span> 차량번호 : 경남76바2799</div>
+      <div><span>📞</span> 안내 (임태윤) : <a href="tel:01033463627" class="highlight">010-3346-3627</a></div>
+      <div><span>📞</span> 기사님 연락처 : <a href="tel:01038443471" class="highlight">010-3844-3471</a></div>
+    </div>
+  </div>
+</body>
+</html>
