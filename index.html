@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>버스 픽업 경로</title>
+  <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=nywetzg631"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f9fa;
+    }
+    #map {
+      width: 100%;
+      height: 70vh;
+    }
+    .info {
+      padding: 1em;
+      background: linear-gradient(145deg, #ffffff, #f2f3f5);
+      border-radius: 16px;
+      margin: 1em;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .info h2 {
+      margin-top: 0;
+      color: #444;
+      font-size: 1.3em;
+    }
+    .info ul {
+      padding-left: 1em;
+    }
+    .info li {
+      margin-bottom: 0.5em;
+    }
+    .highlight {
+      background-color: #fff8e1;
+      padding: 0.2em 0.5em;
+      border-radius: 5px;
+    }
+    a.phone {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a.phone:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="info">
+    <h2>🚌 픽업 순서 및 경로</h2>
+    <ul>
+      <li>① 김해센텀병원 (06:30) / 주소 : 경남 김해시 구지로 56</li>
+      <li>② 장유1동사무소 (06:40) / 주소 : 경남 김해시 금관대로 579</li>
+      <li>③ 창원시청 버스정류소 (07:00) / 주소 : 경남 창원시 성산구 중앙대로 151</li>
+      <li>④ 마산역(투썸플레이스 앞) (07:30) / 주소 : 경남 창원시 마산회원구 마산역광장로 28</li>
+      <li>⑤ 아펠가모 공덕점 (도착) / 주소 : 서울 마포구 마포대로 92 효성해링턴스퀘어 B동 7층</li>
+    </ul>
+    <p>🚍 <span class="highlight">차량번호</span> : 경남76바2799</p>
+    <p>👤 <span class="highlight">안내</span> : 임태윤 (<a class="phone" href="tel:01033463527">010-3346-3527</a>)</p>
+    <p>🧑‍✈️ <span class="highlight">기사님 연락처</span> : <a class="phone" href="tel:01038443471">010-3844-3471</a></p>
+  </div>
+
+  <div id="map"></div>
+
+  <script>
+    var map = new naver.maps.Map("map", {
+      center: new naver.maps.LatLng(35.227543, 128.682300),
+      zoom: 9
+    });
+
+    const points = [
+      {
+        title: "① 김해센텀병원 (06:30)",
+        lat: 35.239482,
+        lng: 128.869275,
+        link: "https://map.naver.com/p/entry/place/21295525?c=17.58,0,0,0,dh"
+      },
+      {
+        title: "② 장유1동사무소 (06:40)",
+        lat: 35.201094,
+        lng: 128.813072,
+        link: "https://map.naver.com/p/entry/place/15509380?c=19.21,0,0,0,dh"
+      },
+      {
+        title: "③ 창원시청 버스정류소 (07:00)",
+        lat: 35.227543,
+        lng: 128.682300,
+        link: "https://map.naver.com/p/entry/bus-station/602536?c=17.85,0,0,0,dh"
+      },
+      {
+        title: "④ 마산역(투썸플레이스 앞) (07:30)",
+        lat: 35.234593,
+        lng: 128.577634,
+        link: "https://map.naver.com/p/entry/place/1626615685?c=19.28,0,0,0,dh"
+      },
+      {
+        title: "⑤ 아펠가모 공덕점 (도착)",
+        lat: 37.541360,
+        lng: 126.951083,
+        link: "https://map.naver.com/p/entry/place/1343103059?c=17.58,0,0,0,dh"
+      }
+    ];
+
+    const path = [];
+
+    points.forEach(({ title, lat, lng, link }) => {
+      const latlng = new naver.maps.LatLng(lat, lng);
+      path.push(latlng);
+
+      const marker = new naver.maps.Marker({
+        position: latlng,
+        map: map,
+        title: title
+      });
+
+      const infoWindow = new naver.maps.InfoWindow({
+        content: `<div style="padding:8px;"><strong>${title}</strong><br><a href="${link}" target="_blank">📍 네이버맵으로 열기</a></div>`
+      });
+
+      naver.maps.Event.addListener(marker, "click", () => {
+        infoWindow.open(map, marker);
+      });
+    });
+
+    const polyline = new naver.maps.Polyline({
+      map: map,
+      path: path,
+      strokeColor: '#007bff',
+      strokeWeight: 4,
+      strokeOpacity: 0.8
+    });
+
+    const bounds = new naver.maps.LatLngBounds(path[0], path[0]);
+    path.forEach(p => bounds.extend(p));
+    map.fitBounds(bounds);
+  </script>
+</body>
+</html>
