@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>버스 픽업 경로</title>
+  <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=nywetzg631"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; }
+    #container { display: flex; flex-direction: column; height: 100vh; }
+    #header {
+      padding: 12px;
+      font-size: 14px;
+      background: #f9f9f9;
+      border-bottom: 1px solid #ccc;
+      line-height: 1.6;
+      overflow-y: auto;
+    }
+    #map {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="header">
+      <strong>픽업 순서 및 경로</strong><br>
+      ① 김해센텀병원 (06:30) / 주소 : 경남 김해시 구지로 56<br>
+      ② 장유1동사무소 (06:40) / 주소 : 경남 김해시 금관대로 579<br>
+      ③ 창원시청 버스정류소 (07:00) / 주소 : 경남 창원시 성산구 중앙대로 151<br>
+      ④ 마산역(구 아리랑호텔) (07:30) / 주소 : 경남 창원시 마산회원구 마산역광장로 24<br>
+      ⑤ 아펠가모 공덕점 (도착) / 주소 : 서울 마포구 마포대로 92 효성해링턴스퀘어 B동 7층
+    </div>
+    <div id="map"></div>
+  </div>
+
+  <script>
+    const map = new naver.maps.Map('map', {
+      center: new naver.maps.LatLng(35.227543, 128.682300),
+      zoom: 9,
+      zoomControl: true,
+      zoomControlOptions: { position: naver.maps.Position.TOP_RIGHT }
+    });
+
+    const points = [
+      {
+        title: "① 김해센텀병원 (06:30)",
+        lat: 35.239482,
+        lng: 128.869275,
+        link: "https://map.naver.com/p/entry/place/21295525?c=17.58,0,0,0,dh"
+      },
+      {
+        title: "② 장유1동사무소 (06:40)",
+        lat: 35.201094,
+        lng: 128.813072,
+        link: "https://map.naver.com/p/entry/place/15509380?c=19.21,0,0,0,dh"
+      },
+      {
+        title: "③ 창원시청 버스정류소 (07:00)",
+        lat: 35.227543,
+        lng: 128.682300,
+        link: "https://map.naver.com/p/entry/bus-station/602536?c=17.85,0,0,0,dh"
+      },
+      {
+        title: "④ 마산역(구 아리랑호텔) (07:30)",
+        lat: 35.234593,
+        lng: 128.577634,
+        link: "https://map.naver.com/p/entry/place/1626615685?c=19.28,0,0,0,dh"
+      }
+    ];
+
+    const path = [];
+
+    points.forEach(({ title, lat, lng, link }) => {
+      const latlng = new naver.maps.LatLng(lat, lng);
+      path.push(latlng);
+
+      const marker = new naver.maps.Marker({
+        position: latlng,
+        map: map,
+        title: title
+      });
+
+      const infoWindow = new naver.maps.InfoWindow({
+        content: `<div style="padding:8px;"><strong>${title}</strong><br><a href="${link}" target="_blank">📍 네이버맵으로 열기</a></div>`
+      });
+
+      naver.maps.Event.addListener(marker, "click", () => {
+        infoWindow.open(map, marker);
+      });
+    });
+
+    const polyline = new naver.maps.Polyline({
+      map: map,
+      path: path,
+      strokeColor: '#007aff',
+      strokeWeight: 4,
+      strokeOpacity: 0.9
+    });
+
+    const bounds = new naver.maps.LatLngBounds(path[0], path[0]);
+    path.forEach(p => bounds.extend(p));
+    map.fitBounds(bounds);
+  </script>
+</body>
+</html>
